@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { faTrash, faPlus, faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { AppServiceService } from '../../app-service.service';
-
 @Component({
   selector: 'app-teacher-table',
   templateUrl: './teacher-table.component.html',
@@ -13,51 +12,73 @@ export class TeacherTableComponent implements OnInit {
   faTrash = faTrash;
   faPlus = faPlus;
   faPenSquare = faPenSquare;
-
-  teacherData: any[] = [];
-  allTeacherData: any[] = []; // backup for resetting after search
+  teacherData: any;
+  selected: any;
 
   constructor(private service: AppServiceService, private router: Router) { }
+
 
   ngOnInit(): void {
     this.getTeacherData();
   }
 
   addNewTeacher() {
-    this.router.navigate(['addTeacher']);
+    this.router.navigate(['addTeacher'])
   }
 
-  editTeacher(id: any) {
+  editTeacher(id) {
     const navigationExtras: NavigationExtras = {
-      state: { id: id }
+      state: {
+        id: id
+      }
     };
-    this.router.navigate(['editTeacher'], navigationExtras);
+    this.router.navigate(['editTeacher'], navigationExtras)
+  }
+
+  initializeDB(){
+    this.service.initializeDB().subscribe((response) => {
+      console.log('DB is Initialized')
+    }, (error) => {
+      console.log('ERROR - ', error)
+    })
   }
 
   getTeacherData() {
+    this.selected = 'Teachers';
     this.service.getTeacherData().subscribe((response) => {
       this.teacherData = Object.keys(response).map((key) => [response[key]]);
-      this.allTeacherData = [...this.teacherData]; // keep original copy
     }, (error) => {
-      console.log('ERROR - ', error);
-    });
+      console.log('ERROR - ', error)
+    })
   }
 
-  deleteTeacher(itemid: any) {
-    const teacher = { id: itemid };
-    this.service.deleteTeacher(teacher).subscribe(() => {
-      this.getTeacherData();
-    });
+  getStudentData() {
+    this.selected = 'Students';
+    this.service.getStudentData().subscribe((response) => {
+      this.teacherData = response;
+    }, (error) => {
+      console.log('ERROR - ', error)
+    })
   }
 
-  search(value: string) {
-    const searchTerm = value.toLowerCase().trim();
-    if (searchTerm === '') {
-      this.teacherData = [...this.allTeacherData];
-    } else {
-      this.teacherData = this.allTeacherData.filter(teacher =>
-        teacher[0].name.toLowerCase().includes(searchTerm)
-      );
+search(value: string) {
+  if (!value || value.trim().length === 0) {
+    this.getTeacherData();
+  } else {
+    const searchValue = value.toLowerCase();
+    this.teacherData = this.teacherData.filter((teacher) =>
+      teacher[0].name.toLowerCase().includes(searchValue)
+    );
+  }
+}
+
+
+  deleteTeacher(itemid) {
+    const test = {
+      id: itemid
     }
+    this.service.deleteTeacher(test).subscribe((response) => {
+      this.getTeacherData()
+    })
   }
 }
