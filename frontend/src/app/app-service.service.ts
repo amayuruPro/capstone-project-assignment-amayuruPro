@@ -18,11 +18,11 @@ export class AppServiceService {
   }
 
   initializeDB(){
-    return this.http.get(`/api/dbinitialize`)
+    return this.http.get(`/${this.ROOT_URL}/dbinitialize`)
   }
 
   getTeacherData(){
-    return this.http.get(`/api/listTeachers`)
+    return this.http.get(`/${this.ROOT_URL}/listTeachers`)
   }
 
   getStudentData(){
@@ -34,19 +34,19 @@ export class AppServiceService {
   }
 
   getOneTeacherData(payload: Object){
-    return this.http.post(`/api/getTeacherInfo`, payload)
+    return this.http.post(`/${this.ROOT_URL}/getTeacherInfo`, payload)
   }
 
   addTeacher(payload: Object){
-    return this.http.post(`/api/addTeacher`, payload)
+    return this.http.post(`/${this.ROOT_URL}/addTeacher`, payload)
   }
 
   deleteTeacher(payload: Object){
-    return this.http.post(`/api/deleteTeacher`, payload)
+    return this.http.post(`/${this.ROOT_URL}/deleteTeacher`, payload)
   }
 
   editTeacher(payload: Object){
-    return this.http.post(`/api/editTeacher`, payload)
+    return this.http.post(`/${this.ROOT_URL}/editTeacher`, payload)
   }
 
   editStudent(payload: Object){

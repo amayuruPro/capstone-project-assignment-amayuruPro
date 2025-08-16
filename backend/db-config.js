@@ -6,7 +6,6 @@ let db = null
 if (process.env.NODE_ENV === "test") {
   console.log("TEST DB")
   db = knex(config.test)
-  testBase.resetDatabase(db);
 } else if (process.env.NODE_ENV === "test-backend") {
   console.log("TEST DB")
   db = knex(config.test)

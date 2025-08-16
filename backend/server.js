@@ -30,10 +30,15 @@ app.get("/dbinitialize", async function (req, res) {
 
 app.get("/listTeachers", async function (req, res) {
   console.log("Request received to list teachers");
-  let data = await readTeachers();
-
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(data));
+  try {
+    let data = await readTeachers();
+    console.log("Teachers data:", data);
+    res.setHeader("Content-Type", "application/json");
+    res.end(JSON.stringify(data));
+  } catch (error) {
+    console.error("Error reading teachers:", error);
+    res.status(500).json({ error: "Failed to read teachers" });
+  }
 });
 
 app.post("/getTeacherInfo", async function (req, res) {

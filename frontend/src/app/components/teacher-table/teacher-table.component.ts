@@ -46,7 +46,9 @@ export class TeacherTableComponent implements OnInit {
   getTeacherData() {
     this.selected = 'Teachers';
     this.service.getTeacherData().subscribe((response) => {
+      console.log('Raw response:', response);
       this.teacherData = Object.keys(response).map((key) => [response[key]]);
+      console.log('Processed teacherData:', this.teacherData);
     }, (error) => {
       console.log('ERROR - ', error)
     })
@@ -62,7 +64,7 @@ export class TeacherTableComponent implements OnInit {
   }
 
 search(value) {
-  let foundItems = [];
+  let foundItems: any[] = [];
   if (value.length <= 0) {
     this.getTeacherData();
   } else {
