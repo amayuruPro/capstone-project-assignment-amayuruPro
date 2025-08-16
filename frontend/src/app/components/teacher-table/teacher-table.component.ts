@@ -48,38 +48,32 @@ export class TeacherTableComponent implements OnInit {
 
   getTeacherData() {
     this.selected = 'Teachers';
-    this.service.getTeacherData().subscribe(
-      (response) => {
-        this.teacherData = Object.keys(response).map((key) => [response[key]]);
-        this.originalTeacherData = [...this.teacherData]; // Save original data
-      },
-      (error) => {
-        console.log('ERROR - ', error);
-      }
-    );
+    this.service.getTeacherData().subscribe((response) => {
+      this.teacherData = Object.keys(response).map((key) => [response[key]]);
+      this.originalTeacherData = [...this.teacherData]; // Save original data
+    }, (error) => {
+      console.log('ERROR - ', error);
+    });
   }
 
   getStudentData() {
     this.selected = 'Students';
-    this.service.getStudentData().subscribe(
-      (response) => {
-        this.teacherData = response;
-      },
-      (error) => {
-        console.log('ERROR - ', error);
-      }
-    );
+    this.service.getStudentData().subscribe((response) => {
+      this.teacherData = response;
+    }, (error) => {
+      console.log('ERROR - ', error);
+    });
   }
 
   search(value: string) {
-    const searchTerm = value.trim().toLowerCase();
-    if (!searchTerm) {
+    if (!value || value.length <= 0) {
       // Restore original data if search is empty
       this.teacherData = [...this.originalTeacherData];
     } else {
-      // Filter teacherData by name
+      // Filter teacherData by name (case-insensitive)
+      const searchTerm = value.toLowerCase();
       this.teacherData = this.originalTeacherData.filter((teacher: any) =>
-        teacher[0].name.toLowerCase().includes(searchTerm)
+        teacher[0].name.toLowerCase().indexOf(searchTerm) > -1
       );
     }
   }
